@@ -40,7 +40,7 @@ export const SignUp = catchAsyncError(async (req, res) => {
   }
 
   // check for avatar
-  console.log(req.file.path);
+  console.log(req.file);
   if (!req.file) {
     throw new ApiError(400, "Please Upload Avatar");
   }
@@ -48,17 +48,29 @@ export const SignUp = catchAsyncError(async (req, res) => {
   const localFilePath = req.file?.path;
   // upload avatar to cloudinary
   const uploadAvatar = await uploadToCloudinary(localFilePath);
-  res.status(200).json(
-    new ApiResponse(
-      200,
-      {
-        body: req.body,
-        file: req.file,
-        url: uploadAvatar?.url,
-      },
-      "Student Signed Up Successfully"
-    )
+
+  const createdStudent = await Student.create({
+    firstName,
+    lastName,
+    email,
+    password,
+    avatar: uploadAvatar?.url,
+  });
+
+  const registredStudent = await Student.findById(createdStudent._id).select(
+    "-password"
   );
+
+  if (!registredStudent) {
+    throw new ApiError(500, "Error While Creating Student");
+  }
+
+  // console.log(registredStudent);
+  res
+    .status(200)
+    .json(
+      new ApiResponse(200, registredStudent, "Student Signed Up Successfully")
+    );
 });
 
 // Student Sign In

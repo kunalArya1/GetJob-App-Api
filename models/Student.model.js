@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const studentSchema = new mongoose.Schema(
   {
@@ -42,9 +44,9 @@ const studentSchema = new mongoose.Schema(
       required: [true, "Password is required"],
       minLenght: [5, "Password must be at least 5 characters long"],
     },
-    // avatar: {
-    //   type: String,
-    // },
+    avatar: {
+      type: String,
+    },
     resmue: {
       education: [],
       jobs: [],
@@ -60,5 +62,28 @@ const studentSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+studentSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+
+  this.password = await bcrypt.hash(this.password, 12);
+});
+
+studentSchema.methods.isPassportCorrect = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
+
+studentSchema.methods.generateAccessToken = function () {
+  return jwt.sign(
+    {
+      id: this._id,
+      email: this.email,
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: process.env.JWT_EXPIRES,
+    }
+  );
+};
 
 export default mongoose.model("Student", studentSchema);
