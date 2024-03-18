@@ -2,6 +2,7 @@ import catchAsyncError from "../utils/catchAsyncError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 import Student from "../models/Student.model.js";
+import { uploadToCloudinary } from "../utils/Cloudinary.js";
 // Student Homepage
 export const studHomepage = (req, res) => {
   res.send("Student Homepage");
@@ -38,12 +39,22 @@ export const SignUp = catchAsyncError(async (req, res) => {
     throw new ApiError(400, "User Already Registred With This Email ID");
   }
 
+  // check for avatar
+  console.log(req.file.path);
+  if (!req.file) {
+    throw new ApiError(400, "Please Upload Avatar");
+  }
+
+  const localFilePath = req.file?.path;
+  // upload avatar to cloudinary
+  const uploadAvatar = await uploadToCloudinary(localFilePath);
   res.status(200).json(
     new ApiResponse(
       200,
       {
         body: req.body,
         file: req.file,
+        url: uploadAvatar?.url,
       },
       "Student Signed Up Successfully"
     )
