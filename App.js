@@ -1,6 +1,9 @@
 import express from "express";
 import connectDB from "./db/Connect.db.js";
 import dotenv from "dotenv";
+import studentRoutes from "./routes/Student.routes.js";
+
+// Express App
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -10,7 +13,10 @@ dotenv.config();
 // Body parser
 app.use(express.json());
 
-// Routes
+// Routes Setup
+
+app.use("/api/student", studentRoutes);
+
 app.get("/", (req, res) => {
   res.send("Hello form Server");
 });
