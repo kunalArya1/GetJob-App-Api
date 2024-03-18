@@ -40,7 +40,7 @@ const studentSchema = new mongoose.Schema(
     // },
     password: {
       type: String,
-      select: false, // to hide password from response
+      // select: false, // to hide password from response
       required: [true, "Password is required"],
       minLenght: [5, "Password must be at least 5 characters long"],
     },
@@ -65,12 +65,15 @@ const studentSchema = new mongoose.Schema(
 
 studentSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
+  let salt = bcrypt.genSaltSync(10);
 
-  this.password = await bcrypt.hash(this.password, 12);
+  this.password = await bcrypt.hash(this.password, salt);
 });
 
 studentSchema.methods.isPassportCorrect = async function (password) {
-  return await bcrypt.compare(password, this.password);
+  // i am getting the value of this.password is undefined here can you please check it why this is happing
+  console.log(password, this.password);
+  return await bcrypt.compareSync(password, this.password);
 };
 
 studentSchema.methods.generateAccessToken = function () {

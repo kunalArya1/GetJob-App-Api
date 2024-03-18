@@ -4,10 +4,16 @@ import { ApiError } from "../utils/ApiError.js";
 import Student from "../models/Student.model.js";
 import { uploadToCloudinary } from "../utils/Cloudinary.js";
 // Student Homepage
-export const studHomepage = (req, res) => {
-  res.send("Student Homepage");
+export const Homepage = (req, res) => {
+  res.send("Secure Homepage");
 };
 
+export const StudentDetails = catchAsyncError(async (req, res) => {
+  const student = await Student.findById(req.user.id).select("-password");
+  res
+    .status(200)
+    .json(new ApiResponse(200, student, "Student data Fetched Successfully"));
+});
 // Student Sign Up
 export const SignUp = catchAsyncError(async (req, res) => {
   console.log(req.body);
@@ -75,12 +81,45 @@ export const SignUp = catchAsyncError(async (req, res) => {
 
 // Student Sign In
 export const SignIn = catchAsyncError(async (req, res) => {
-  res.send("Student Signed In Successfully");
+  const { email, password } = req.body;
+
+  // console.log(req.body);
+
+  if (!email || !password) {
+    throw new ApiError(400, "Email and Password are required!");
+  }
+
+  const student = await Student.findOne({ email });
+
+  if (!student) {
+    throw new ApiError(401, "Student with this email is not registred");
+  }
+
+  const isPasswordMatching = student.isPassportCorrect(password);
+
+  if (!isPasswordMatching) {
+    throw new ApiError(401, "Invalid Password! try again");
+  }
+
+  const accesstoken = await student.generateAccessToken();
+
+  const options = {
+    secure: true,
+    httpOnly: true,
+    exipres: "2d",
+  };
+
+  res
+    .status(200)
+    .cookie("accessToken", accesstoken, options)
+    .json(new ApiResponse(200, accesstoken, "Sign in SuccessFull"));
 });
 
 // Student Sign Out
 export const signOut = catchAsyncError(async (req, res) => {
-  res.send("Student Signed Out Successfully");
+  const user = req.user;
+  console.log(user);
+  res.json(new ApiResponse(200, user, "SignOut Success"));
 });
 
 // Student Forgot Password

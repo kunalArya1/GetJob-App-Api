@@ -2,6 +2,7 @@ import express from "express";
 import connectDB from "./db/Connect.db.js";
 import dotenv from "dotenv";
 import studentRoutes from "./routes/Student.routes.js";
+import cookieParser from "cookie-parser";
 
 // Express App
 const app = express();
@@ -14,6 +15,8 @@ dotenv.config();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Cookie Parser
+app.use(cookieParser());
 // Routes Setup
 
 app.use("/api/v1/student", studentRoutes);
