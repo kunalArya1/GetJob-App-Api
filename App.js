@@ -15,7 +15,7 @@ app.use(express.json());
 
 // Routes Setup
 
-app.use("/api/student", studentRoutes);
+app.use("/api/v1/student", studentRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello form Server");
