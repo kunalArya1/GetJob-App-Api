@@ -7,13 +7,14 @@ import {
   forgotPassword,
   resetPassword,
 } from "../controllers/Student.controllers.js";
+import { upload } from "../middlewares/Multer.middleware.js";
 const router = express.Router();
 
 // GET /api/v1/student/
 router.route("/").get(studHomepage);
 
 // POST /api/v1/student/sign-up
-router.route("/sign-up").post(SignUp);
+router.route("/sign-up").post(upload.single("avatar"), SignUp);
 
 // POST /api/v1/student/sign-in
 router.route("/sign-in").post(SignIn);

@@ -40,7 +40,7 @@ const studentSchema = new mongoose.Schema(
       type: String,
       select: false, // to hide password from response
       required: [true, "Password is required"],
-      minLenght: [8, "Password must be at least 8 characters long"],
+      minLenght: [5, "Password must be at least 5 characters long"],
     },
     // avatar: {
     //   type: String,
@@ -60,3 +60,5 @@ const studentSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+export default mongoose.model("Student", studentSchema);
