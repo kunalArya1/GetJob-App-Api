@@ -13,6 +13,9 @@ import {
   addresponsibilities,
   editresponsibilities,
   deleteresponsibilities,
+  addproject,
+  editproject,
+  deleteproject,
 } from "../controllers/Resume.controllers.js";
 import { isLoggoedIn } from "../middlewares/Auth.middleware.js";
 const router = express.Router();
@@ -76,5 +79,18 @@ router
 router
   .route("/delete-responsibilities/:resid")
   .post(isLoggoedIn, deleteresponsibilities);
+
+{
+  /** ---------------------- projects Routes ----------------------- */
+}
+
+// POST /api/v1/resume/add-project
+router.route("/add-project").post(isLoggoedIn, addproject);
+
+// POST  /api/v1/resume/edit-project/:projectid
+router.route("/edit-project/:projectid").post(isLoggoedIn, editproject);
+
+// POST /api/v1/resmue/delete-project/:projectid
+router.route("/delete-project/:projectid").post(isLoggoedIn, deleteproject);
 
 export default router;
