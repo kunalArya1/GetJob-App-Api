@@ -35,5 +35,12 @@ export const editEduaction = catchAsyncError(async (req, res, next) => {
 });
 
 export const deleteEducation = catchAsyncError(async (req, res, next) => {
-  res.send("Education Deleted");
+  const student = await Student.findById(req.user.id).select("-password");
+  const filteredEdu = student.resmue.education.filter(
+    (i) => i.id !== req.params.eduid
+  );
+  student.resmue.education = filteredEdu;
+  await student.save();
+
+  res.status(200).json(new ApiResponse(200, {}, "Education Deleted!"));
 });
