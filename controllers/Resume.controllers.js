@@ -123,3 +123,53 @@ export const deleteinternship = catchAsyncError(async (req, res, next) => {
 
   res.status(200).json(new ApiResponse(200, {}, " Internship Removed!"));
 });
+
+{
+  /** ----------------------Responsibilities EndPoint--------------------- */
+}
+
+export const addresponsibilities = catchAsyncError(async (req, res, next) => {
+  const student = await Student.findById(req.user.id).select("-password");
+
+  student.resmue.responsibilities.push({ ...req.body, id: uuidv4() });
+  await student.save();
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, req.body, " responsibilities added!"));
+});
+
+export const editresponsibilities = catchAsyncError(async (req, res, next) => {
+  const student = await Student.findById(req.user.id).select("-password");
+
+  const responsibilitiesIndex = student.resmue.responsibilities.findIndex(
+    (i) => i.id === req.params.resid
+  );
+
+  student.resmue.responsibilities[responsibilitiesIndex] = {
+    ...student.resume.responsibilities[responsibilitiesIndex],
+    ...req.body,
+  };
+
+  await student.save();
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, req.body, " responsibilities updated!"));
+});
+
+export const deleteresponsibilities = catchAsyncError(
+  async (req, res, next) => {
+    const student = await Student.findById(req.user.id).select("-password");
+    const filteredresponsibilities = student.resmue.responsibilities.filter(
+      (i) => i.id !== req.params.resid
+    );
+
+    student.resmue.internships = filteredresponsibilities;
+    await student.save();
+
+    res
+      .status(200)
+      .json(new ApiResponse(200, {}, " responsibilities Removed!"));
+  }
+);

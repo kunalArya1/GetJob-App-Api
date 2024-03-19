@@ -10,6 +10,9 @@ import {
   addinternship,
   editinternship,
   deleteinternship,
+  addresponsibilities,
+  editresponsibilities,
+  deleteresponsibilities,
 } from "../controllers/Resume.controllers.js";
 import { isLoggoedIn } from "../middlewares/Auth.middleware.js";
 const router = express.Router();
@@ -56,5 +59,22 @@ router.route("/edit-internship/:internid").post(isLoggoedIn, editinternship);
 router
   .route("/delete-internship/:internid")
   .post(isLoggoedIn, deleteinternship);
+
+{
+  /** ---------------------- responsibilities Routes ----------------------- */
+}
+
+// POST /api/v1/resume/add-responsibilities
+router.route("/add-responsibilities").post(isLoggoedIn, addresponsibilities);
+
+// POST  /api/v1/resume/edit-responsibilities/:id
+router
+  .route("/edit-responsibilities/:resnid")
+  .post(isLoggoedIn, editresponsibilities);
+
+// POST /api/v1/resmue/delete-responsibilities/:id
+router
+  .route("/delete-responsibilities/:resid")
+  .post(isLoggoedIn, deleteresponsibilities);
 
 export default router;
