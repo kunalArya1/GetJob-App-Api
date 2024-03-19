@@ -3,6 +3,7 @@ import connectDB from "./db/Connect.db.js";
 import dotenv from "dotenv";
 import studentRoutes from "./routes/Student.routes.js";
 import cookieParser from "cookie-parser";
+import { customError } from "./utils/CustomError.js";
 
 // Express App
 const app = express();
@@ -24,6 +25,8 @@ app.use("/api/v1/student", studentRoutes);
 app.get("/", (req, res) => {
   res.send("Hello form Server");
 });
+
+app.use("*", customError);
 
 const start = async () => {
   try {

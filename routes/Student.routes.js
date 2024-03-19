@@ -31,9 +31,9 @@ router.route("/sign-out").post(isLoggoedIn, signOut);
 // POST /api/v1/student/forgot-password ✅
 router.route("/forgot-password").post(forgotPassword);
 
-// GET  /api/v1/student/forgot-password-link
+// GET  /api/v1/student/forgot-password-link ✅
 router.route("/forgot-password-link/:id").get(forgotPasswordLink);
 
-// POST /api/v1/student/reset-password
-router.route("/reset-password").post(resetPassword);
+// POST /api/v1/student/reset-password ✅
+router.route("/reset-password").post(isLoggoedIn, resetPassword);
 export default router;

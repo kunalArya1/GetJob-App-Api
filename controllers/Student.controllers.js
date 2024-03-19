@@ -17,18 +17,8 @@ export const StudentDetails = catchAsyncError(async (req, res) => {
 });
 // Student Sign Up
 export const SignUp = catchAsyncError(async (req, res) => {
-  // console.log(req.body);
-  // get user details from frontend
-  // validation - not empty
-  // check if user already exists: username, email
-  // check for images, check for avatar
-  // upload them to cloudinary, avatar
-  // create user object - create entry in db
-  // remove password and refresh token field from response
-  // check for user creation
-  // return res
-
-  const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, email, password, city, gender, contact } =
+    req.body;
   // console.log(req.body, req.file);
 
   // check if any field is empty or not provided
@@ -47,7 +37,6 @@ export const SignUp = catchAsyncError(async (req, res) => {
   }
 
   // check for avatar
-  // console.log(req.file);
   if (!req.file) {
     throw new ApiError(400, "Please Upload Avatar");
   }
@@ -61,6 +50,9 @@ export const SignUp = catchAsyncError(async (req, res) => {
     lastName,
     email,
     password,
+    city,
+    contact,
+    gender,
     avatar: uploadAvatar?.url,
   });
 
@@ -90,13 +82,16 @@ export const SignIn = catchAsyncError(async (req, res) => {
     throw new ApiError(400, "Email and Password are required!");
   }
 
-  const student = await Student.findOne({ email });
+  const student = await Student.findOne({ email }).select("-password");
 
+  // console.log(student);
   if (!student) {
     throw new ApiError(401, "Student with this email is not registred");
   }
 
-  const isPasswordMatching = student.isPassportCorrect(password);
+  const isPasswordMatching = await student.isPassportCorrect(password);
+
+  // console.log(isPasswordMatching);
 
   if (!isPasswordMatching) {
     throw new ApiError(401, "Invalid Password! try again");
@@ -107,7 +102,6 @@ export const SignIn = catchAsyncError(async (req, res) => {
   const options = {
     secure: true,
     httpOnly: true,
-    exipres: "2d",
   };
 
   res
@@ -118,8 +112,8 @@ export const SignIn = catchAsyncError(async (req, res) => {
 
 // Student Sign Out
 export const signOut = catchAsyncError(async (req, res) => {
+  res.clearCookie("accessToken");
   const user = req.user;
-  console.log(user);
   res.json(new ApiResponse(200, user, "SignOut Success"));
 });
 
@@ -177,5 +171,20 @@ export const forgotPasswordLink = catchAsyncError(async (req, res) => {
 
 // Student Reset Password
 export const resetPassword = catchAsyncError(async (req, res) => {
-  res.send("Student Reset Password Successfully");
+  console.log(req.user);
+  const student = await Student.findById(req.user.id);
+
+  student.password = req.body.password;
+  await student.save();
+
+  const accessToken = await student.generateAccessToken();
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .json(new ApiResponse(200, accessToken, "Password reset Successfully!"));
 });

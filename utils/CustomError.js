@@ -6,3 +6,4 @@ const customError = (err, req, res, next) => {
     errName: err.name,
   });
 };
+export { customError };
