@@ -146,7 +146,7 @@ export const forgotPassword = catchAsyncError(async (req, res, next) => {
 
   console.log(url);
   // send the link to user email
-  sendMail(req, res, next, url);
+  sendMail(url, req, res, next);
 
   res.status(200).json(new ApiResponse(200, url, "Email has been sent"));
 });

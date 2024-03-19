@@ -3,7 +3,7 @@ import catchAsyncError from "./catchAsyncError.js";
 import { ApiError } from "./ApiError.js";
 import { ApiResponse } from "./ApiResponse.js";
 
-const sendMail = catchAsyncError(async (req, res, next, url) => {
+const sendMail = catchAsyncError(async (url, req, res, next) => {
   console.log(url);
   const transporter = nodemailer.createTransport({
     // host: "smtp.ethereal.email",
