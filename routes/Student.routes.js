@@ -28,11 +28,11 @@ router.route("/sign-in").post(SignIn);
 // POST /api/v1/student/sign-out ✅
 router.route("/sign-out").post(isLoggoedIn, signOut);
 
-// POST /api/v1/student/forgot-password
+// POST /api/v1/student/forgot-password ✅
 router.route("/forgot-password").post(forgotPassword);
 
 // GET  /api/v1/student/forgot-password-link
-router.route("/forgot-password-link").get(forgotPasswordLink);
+router.route("/forgot-password-link/:id").get(forgotPasswordLink);
 
 // POST /api/v1/student/reset-password
 router.route("/reset-password").post(resetPassword);

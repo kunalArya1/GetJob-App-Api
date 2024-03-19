@@ -127,7 +127,7 @@ export const signOut = catchAsyncError(async (req, res) => {
 export const forgotPassword = catchAsyncError(async (req, res, next) => {
   // Get user Emial from Body
   const { email } = req.body;
-  console.log(email);
+  // console.log(email);
 
   const student = await Student.findOne({ email });
 
@@ -144,7 +144,7 @@ export const forgotPassword = catchAsyncError(async (req, res, next) => {
     "host"
   )}/api/v1/student/forgot-password-link/${student._id}`;
 
-  console.log(url);
+  // console.log(url);
   // send the link to user email
   sendMail(url, req, res, next);
 
@@ -153,7 +153,26 @@ export const forgotPassword = catchAsyncError(async (req, res, next) => {
 
 // Student Forgot Passsword Link
 export const forgotPasswordLink = catchAsyncError(async (req, res) => {
-  res.send("Please Check Your Email To Reset The Password");
+  const id = req.params.id;
+  console.log(id);
+
+  const student = await Student.findById(id);
+  // console.log(student);
+  if (!student) {
+    throw new ApiError(401, "Invalid Link ! Try again with correct Link");
+  }
+  console.log(req.body.password, student.password);
+  student.password = req.body.password;
+  await student.save();
+
+  console.log(student.password);
+
+  res
+    .status(200)
+
+    .json(
+      new ApiResponse(200, {}, "Password Changed SuccessFully! Do Remember..")
+    );
 });
 
 // Student Reset Password

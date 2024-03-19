@@ -71,7 +71,6 @@ studentSchema.pre("save", async function (next) {
 });
 
 studentSchema.methods.isPassportCorrect = async function (password) {
-  // i am getting the value of this.password is undefined here can you please check it why this is happing
   console.log(password, this.password);
   return await bcrypt.compareSync(password, this.password);
 };
