@@ -9,7 +9,7 @@ export const homePage = catchAsyncError(async (req, res, next) => {
 });
 
 {
-  /** ----------------------------Eduacation Details-------------------------- */
+  /** ----------------------------Eduacation EndPoint-------------------------- */
 }
 
 export const addEducation = catchAsyncError(async (req, res, next) => {
@@ -43,4 +43,41 @@ export const deleteEducation = catchAsyncError(async (req, res, next) => {
   await student.save();
 
   res.status(200).json(new ApiResponse(200, {}, "Education Deleted!"));
+});
+
+{
+  /** ----------------------------Job  EndPoint-------------------------- */
+}
+
+export const addjob = catchAsyncError(async (req, res, next) => {
+  const student = await Student.findById(req.user.id).select("-password");
+  student.resmue.jobs.push({ ...req.body, id: uuidv4() });
+  await student.save();
+  res.status(200).json(new ApiResponse(200, req.body, "Job Added!"));
+});
+
+export const editjob = catchAsyncError(async (req, res, next) => {
+  const student = await Student.findById(req.user.id).select("-password");
+  const jobIndex = student.resmue.jobs.findIndex(
+    (i) => i.id === req.params.jobid
+  );
+
+  student.resmue.jobs[jobIndex] = {
+    ...student.resmue.jobs[jobIndex],
+    ...req.body,
+  };
+
+  await student.save();
+  res.status(200).json(new ApiResponse(200, req.body, "Job Updated!"));
+});
+
+export const deletejob = catchAsyncError(async (req, res, next) => {
+  const student = await Student.findById(req.user.id).select("-password");
+  const filteredJob = student.resume.jobs.filter(
+    (i) => i.id !== req.params.jobid
+  );
+
+  student.resmue.jobs = filteredJob;
+  await student.save();
+  res.status(200).json(new ApiResponse(200, {}, "Job Removed!"));
 });
