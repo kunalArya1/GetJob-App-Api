@@ -47,6 +47,10 @@ const studentSchema = new mongoose.Schema(
     avatar: {
       type: String,
     },
+    resetPawwordToken: {
+      type: String,
+      default: "0",
+    },
     resmue: {
       education: [],
       jobs: [],

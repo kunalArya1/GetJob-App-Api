@@ -141,12 +141,14 @@ export const forgotPassword = catchAsyncError(async (req, res, next) => {
   // console.log(url);
   // send the link to user email
   sendMail(url, req, res, next);
+  student.resetPawwordToken = "1";
+  await student.save();
 
   res.status(200).json(new ApiResponse(200, url, "Email has been sent"));
 });
 
 // Student Forgot Passsword Link
-export const forgotPasswordLink = catchAsyncError(async (req, res) => {
+export const forgotPasswordLink = catchAsyncError(async (req, res, next) => {
   const id = req.params.id;
   console.log(id);
 
@@ -156,8 +158,14 @@ export const forgotPasswordLink = catchAsyncError(async (req, res) => {
     throw new ApiError(401, "Invalid Link ! Try again with correct Link");
   }
   console.log(req.body.password, student.password);
-  student.password = req.body.password;
-  await student.save();
+
+  if (student.resetPawwordToken == "1") {
+    student.resetPawwordToken = "0";
+    student.password = req.body.password;
+    await student.save();
+  } else {
+    return next(new ApiError(500, "Invalid Forgot Passsword Link"));
+  }
 
   console.log(student.password);
 
