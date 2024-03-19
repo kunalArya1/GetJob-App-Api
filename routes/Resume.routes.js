@@ -16,6 +16,12 @@ import {
   addproject,
   editproject,
   deleteproject,
+  addskill,
+  editskill,
+  deleteskill,
+  addaccomplishments,
+  editaccomplishments,
+  deleteaccomplishments,
 } from "../controllers/Resume.controllers.js";
 import { isLoggoedIn } from "../middlewares/Auth.middleware.js";
 const router = express.Router();
@@ -105,5 +111,22 @@ router.route("/edit-skill/:skillid").post(isLoggoedIn, editskill);
 
 // POST /api/v1/resmue/delete-skill/:skillid
 router.route("/delete-skill/:skilltid").post(isLoggoedIn, deleteskill);
+
+{
+  /** ---------------------- accomplishments Routes ----------------------- */
+}
+
+// POST /api/v1/resume/add-accomplishment
+router.route("/add-accomplishment").post(isLoggoedIn, addaccomplishment);
+
+// POST  /api/v1/resume/edit-accomplishment/:acid
+router
+  .route("/edit-accomplishment/:acid")
+  .post(isLoggoedIn, editaccomplishment);
+
+// POST /api/v1/resmue/delete-accomplishment/:acid
+router
+  .route("/delete-accomplishment/:acid")
+  .post(isLoggoedIn, deleteaccomplishment);
 
 export default router;

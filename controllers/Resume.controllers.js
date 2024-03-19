@@ -217,7 +217,7 @@ export const deleteproject = catchAsyncError(async (req, res, next) => {
 });
 
 {
-  /** ----------------------projects EndPoint--------------------- */
+  /** ----------------------skills EndPoint--------------------- */
 }
 
 export const addskill = catchAsyncError(async (req, res, next) => {
@@ -256,4 +256,50 @@ export const deleteskill = catchAsyncError(async (req, res, next) => {
   await student.save();
 
   res.status(200).json(new ApiResponse(200, {}, " Skills Removed!"));
+});
+
+{
+  /** ----------------------accomplishments EndPoint--------------------- */
+}
+
+export const addaccomplishments = catchAsyncError(async (req, res, next) => {
+  const student = await Student.findById(req.user.id).select("-password");
+
+  student.resmue.accomplishments.push({ ...req.body, id: uuidv4() });
+  await student.save();
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, req.body, " Accomplishments added!"));
+});
+
+export const editaccomplishments = catchAsyncError(async (req, res, next) => {
+  const student = await Student.findById(req.user.id).select("-password");
+
+  const accIndex = student.resmue.accomplishments.findIndex(
+    (i) => i.id === req.params.acid
+  );
+
+  student.resmue.accomplishments[accIndex] = {
+    ...student.resume.accomplishments[accIndex],
+    ...req.body,
+  };
+
+  await student.save();
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, req.body, " Accomplishments updated!"));
+});
+
+export const deleteaccomplishments = catchAsyncError(async (req, res, next) => {
+  const student = await Student.findById(req.user.id).select("-password");
+  const filteredacc = student.resmue.accomplishments.filter(
+    (i) => i.id !== req.params.acid
+  );
+
+  student.resmue.accomplishments = filteredacc;
+  await student.save();
+
+  res.status(200).json(new ApiResponse(200, {}, " Accomplishments Removed!"));
 });
