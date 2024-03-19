@@ -16,8 +16,8 @@ router.route("/").get(homePage);
 router.route("/add-education").post(isLoggoedIn, addEducation);
 
 // POST  /api/v1/resume/edit-education/:id
-router.route("/edit-education/:id").post(isLoggoedIn, editEduaction);
+router.route("/edit-education/:eduid").post(isLoggoedIn, editEduaction);
 
 // POST /api/v1/resmue/delete-education/:id
-router.route("/delete-education/:id").post(isLoggoedIn, deleteEducation);
+router.route("/delete-education/:eduid").post(isLoggoedIn, deleteEducation);
 export default router;

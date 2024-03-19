@@ -21,7 +21,17 @@ export const addEducation = catchAsyncError(async (req, res, next) => {
 });
 
 export const editEduaction = catchAsyncError(async (req, res, next) => {
-  res.send("Education Updated");
+  const student = await student.findById(req.user.id).select("-password");
+  const eduIndex = student.resmue.education.findIndex(
+    (i) => i.id === req.params.eduid
+  );
+
+  student.resmue.education[eduIndex] = {
+    ...student.resmue.education[eduIndex],
+    ...req.body,
+  };
+  await student.save();
+  res.status(200).json(new ApiResponse(200, req.body, "Education Updated!"));
 });
 
 export const deleteEducation = catchAsyncError(async (req, res, next) => {
