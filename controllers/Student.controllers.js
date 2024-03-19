@@ -3,6 +3,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 import Student from "../models/Student.model.js";
 import { uploadToCloudinary } from "../utils/Cloudinary.js";
+import { sendMail } from "../utils/Nodemailer.js";
 // Student Homepage
 export const Homepage = (req, res) => {
   res.send("Secure Homepage");
@@ -16,7 +17,7 @@ export const StudentDetails = catchAsyncError(async (req, res) => {
 });
 // Student Sign Up
 export const SignUp = catchAsyncError(async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   // get user details from frontend
   // validation - not empty
   // check if user already exists: username, email
@@ -28,7 +29,7 @@ export const SignUp = catchAsyncError(async (req, res) => {
   // return res
 
   const { firstName, lastName, email, password } = req.body;
-  console.log(req.body, req.file);
+  // console.log(req.body, req.file);
 
   // check if any field is empty or not provided
   if (
@@ -46,7 +47,7 @@ export const SignUp = catchAsyncError(async (req, res) => {
   }
 
   // check for avatar
-  console.log(req.file);
+  // console.log(req.file);
   if (!req.file) {
     throw new ApiError(400, "Please Upload Avatar");
   }
@@ -123,9 +124,10 @@ export const signOut = catchAsyncError(async (req, res) => {
 });
 
 // Student Forgot Password
-export const forgotPassword = catchAsyncError(async (req, res) => {
+export const forgotPassword = catchAsyncError(async (req, res, next) => {
   // Get user Emial from Body
   const { email } = req.body;
+  console.log(email);
 
   const student = await Student.findOne({ email });
 
@@ -142,10 +144,11 @@ export const forgotPassword = catchAsyncError(async (req, res) => {
     "host"
   )}/api/v1/student/forgot-password-link/${student._id}`;
 
-  // send the link to user email 
+  console.log(url);
+  // send the link to user email
+  sendMail(req, res, next, url);
 
-  
-  res.status(200).json(new ApiResponse(200, url, "Password reset"));
+  res.status(200).json(new ApiResponse(200, url, "Email has been sent"));
 });
 
 // Student Forgot Passsword Link
