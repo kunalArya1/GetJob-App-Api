@@ -207,11 +207,53 @@ export const editproject = catchAsyncError(async (req, res, next) => {
 export const deleteproject = catchAsyncError(async (req, res, next) => {
   const student = await Student.findById(req.user.id).select("-password");
   const filteredprojects = student.resmue.projects.filter(
-    (i) => i.id !== req.params.projectidid
+    (i) => i.id !== req.params.projectid
   );
 
   student.resmue.projects = filteredprojects;
   await student.save();
 
   res.status(200).json(new ApiResponse(200, {}, " Projects Removed!"));
+});
+
+{
+  /** ----------------------projects EndPoint--------------------- */
+}
+
+export const addskill = catchAsyncError(async (req, res, next) => {
+  const student = await Student.findById(req.user.id).select("-password");
+
+  student.resmue.skills.push({ ...req.body, id: uuidv4() });
+  await student.save();
+
+  res.status(200).json(new ApiResponse(200, req.body, " Skills added!"));
+});
+
+export const editskill = catchAsyncError(async (req, res, next) => {
+  const student = await Student.findById(req.user.id).select("-password");
+
+  const skillIndex = student.resmue.skills.findIndex(
+    (i) => i.id === req.params.skillid
+  );
+
+  student.resmue.skills[skillIndex] = {
+    ...student.resume.skills[skillIndex],
+    ...req.body,
+  };
+
+  await student.save();
+
+  res.status(200).json(new ApiResponse(200, req.body, " Skills updated!"));
+});
+
+export const deleteskill = catchAsyncError(async (req, res, next) => {
+  const student = await Student.findById(req.user.id).select("-password");
+  const filteredskills = student.resmue.skills.filter(
+    (i) => i.id !== req.params.skillid
+  );
+
+  student.resmue.skills = filteredskills;
+  await student.save();
+
+  res.status(200).json(new ApiResponse(200, {}, " Skills Removed!"));
 });

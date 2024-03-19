@@ -93,4 +93,17 @@ router.route("/edit-project/:projectid").post(isLoggoedIn, editproject);
 // POST /api/v1/resmue/delete-project/:projectid
 router.route("/delete-project/:projectid").post(isLoggoedIn, deleteproject);
 
+{
+  /** ---------------------- skills Routes ----------------------- */
+}
+
+// POST /api/v1/resume/add-skill
+router.route("/add-skill").post(isLoggoedIn, addskill);
+
+// POST  /api/v1/resume/edit-skill/:skillid
+router.route("/edit-skill/:skillid").post(isLoggoedIn, editskill);
+
+// POST /api/v1/resmue/delete-skill/:skillid
+router.route("/delete-skill/:skilltid").post(isLoggoedIn, deleteskill);
+
 export default router;
