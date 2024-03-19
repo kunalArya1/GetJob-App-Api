@@ -124,7 +124,33 @@ export const signOut = catchAsyncError(async (req, res) => {
 
 // Student Forgot Password
 export const forgotPassword = catchAsyncError(async (req, res) => {
-  res.send("Student Forgot Password Successfully");
+  // Get user Emial from Body
+  const { email } = req.body;
+
+  const student = await Student.findOne({ email });
+
+  // Check the given email is registered with your App or not
+  if (!student) {
+    throw new ApiError(
+      401,
+      "Invalid Email! Please try with your correct Email"
+    );
+  }
+
+  // Create a url where user change their password
+  const url = `${req.protocol}://${req.get(
+    "host"
+  )}/api/v1/student/forgot-password-link/${student._id}`;
+
+  // send the link to user email 
+
+  
+  res.status(200).json(new ApiResponse(200, url, "Password reset"));
+});
+
+// Student Forgot Passsword Link
+export const forgotPasswordLink = catchAsyncError(async (req, res) => {
+  res.send("Please Check Your Email To Reset The Password");
 });
 
 // Student Reset Password

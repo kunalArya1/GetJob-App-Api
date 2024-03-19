@@ -7,6 +7,7 @@ import {
   forgotPassword,
   resetPassword,
   StudentDetails,
+  forgotPasswordLink,
 } from "../controllers/Student.controllers.js";
 import { upload } from "../middlewares/Multer.middleware.js";
 import { isLoggoedIn } from "../middlewares/Auth.middleware.js";
@@ -29,6 +30,9 @@ router.route("/sign-out").post(isLoggoedIn, signOut);
 
 // POST /api/v1/student/forgot-password
 router.route("/forgot-password").post(forgotPassword);
+
+// GET  /api/v1/student/forgot-password-link
+router.route("/forgot-password-link").get(forgotPasswordLink);
 
 // POST /api/v1/student/reset-password
 router.route("/reset-password").post(resetPassword);
