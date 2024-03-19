@@ -30,7 +30,7 @@ app.get("/", (req, res) => {
   res.send("Hello form Server");
 });
 
-app.use("*", customError);
+// app.use("*", customError);
 
 const start = async () => {
   try {

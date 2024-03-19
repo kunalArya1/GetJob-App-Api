@@ -82,7 +82,7 @@ export const SignIn = catchAsyncError(async (req, res) => {
     throw new ApiError(400, "Email and Password are required!");
   }
 
-  const student = await Student.findOne({ email }).select("-password");
+  const student = await Student.findOne({ email });
 
   // console.log(student);
   if (!student) {
