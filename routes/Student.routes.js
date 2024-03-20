@@ -17,7 +17,7 @@ const router = express.Router();
 router.route("/").get(Homepage);
 
 // GET  /api/v1/student/student-data ✅
-router.route("/student-data").get(isLoggoedIn, StudentDetails);
+router.route("/details").get(isLoggoedIn, StudentDetails);
 
 // POST /api/v1/student/sign-up ✅
 router.route("/sign-up").post(upload.single("avatar"), SignUp);
