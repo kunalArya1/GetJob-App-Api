@@ -3,6 +3,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 import Employe from "../models/Employe.model.js";
 import Internship from "../models/Internship.models.js";
+import Job from "../models/job.models.js";
 import { uploadToCloudinary } from "../utils/Cloudinary.js";
 import { sendMail } from "../utils/Nodemailer.js";
 
@@ -200,6 +201,10 @@ export const resetPassword = catchAsyncError(async (req, res) => {
     .json(new ApiResponse(200, accessToken, "Password reset Successfully!"));
 });
 
+{
+  /* <------------------Internship EndPoint----------------------> */
+}
+
 // Employe Add Internship
 
 export const addInternShip = catchAsyncError(async (req, res) => {
@@ -223,6 +228,9 @@ export const getAllEmployeeInternships = catchAsyncError(async (req, res) => {
     "internships"
   );
 
+  if (!internships) {
+    throw new ApiError(404, "No Internships Found");
+  }
   res
     .status(200)
     .json(
@@ -234,9 +242,46 @@ export const getAllEmployeeInternships = catchAsyncError(async (req, res) => {
 export const getSingleInternship = catchAsyncError(async (req, res) => {
   const internship = await Internship.findById(req.params.intershipid);
 
-  if(!internship){
-    throw new ApiError(404, "Internship Not Found");
+  if (!internship) {
+    throw new ApiError(404, "Internship Not Found with this id");
   }
 
   res.status(200).json(new ApiResponse(200, internship, "Internship Fetched"));
+});
+
+{
+  /* <------------------Internship EndPoint----------------------> */
+}
+
+export const addJob = catchAsyncError(async (req, res) => {
+  const employe = await Employe.findById(req.user.id);
+
+  const job = Job.create(req.body);
+
+  employe.jobs.push(await job._id);
+  job.employe = employe._id;
+  await employe.save();
+  await job.save();
+
+  res.status(201).json(new ApiResponse(201, job, "Job Added Successfully"));
+});
+
+export const readJob = catchAsyncError(async (req, res) => {
+  const { jobs } = await Employe.findById(req.user.id).populate("jobs");
+
+  if (!jobs) {
+    throw new ApiError(404, "No Jobs Found");
+  }
+
+  res.status(200).json(new ApiResponse(200, jobs, "Jobs Fetched Successfully"));
+});
+
+export const readSingleJob = catchAsyncError(async (req, res) => {
+  const job = await Job.findById(req.params.jobid);
+
+  if (!job) {
+    throw new ApiError(404, "Job Not Found with this id");
+  }
+
+  res.status(200).json(new ApiResponse(200, job, "Job Fetched"));
 });

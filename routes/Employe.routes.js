@@ -8,6 +8,12 @@ import {
   resetPassword,
   EmployeDetails,
   forgotPasswordLink,
+  addInternship,
+  readInternship,
+  readsingleInternship,
+  addJob,
+  readJob,
+  readSingleJob,
 } from "../controllers/Employe.controllers.js";
 import { upload } from "../middlewares/Multer.middleware.js";
 import { isLoggoedIn } from "../middlewares/Auth.middleware.js";
