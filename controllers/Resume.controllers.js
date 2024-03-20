@@ -175,6 +175,48 @@ export const deleteresponsibilities = catchAsyncError(
 );
 
 {
+  /** ----------------------courses EndPoint--------------------- */
+}
+
+export const addcourse = catchAsyncError(async (req, res, next) => {
+  const student = await Student.findById(req.user.id).select("-password");
+
+  student.resmue.courses.push({ ...req.body, id: uuidv4() });
+  await student.save();
+
+  res.status(200).json(new ApiResponse(200, req.body, " Courses added!"));
+});
+
+export const editcourse = catchAsyncError(async (req, res, next) => {
+  const student = await Student.findById(req.user.id).select("-password");
+
+  const courseIndex = student.resmue.courses.findIndex(
+    (i) => i.id === req.params.courseid
+  );
+
+  student.resmue.courses[courseIndex] = {
+    ...student.resume.courses[courseIndex],
+    ...req.body,
+  };
+
+  await student.save();
+
+  res.status(200).json(new ApiResponse(200, req.body, " Courses updated!"));
+});
+
+export const deletecourse = catchAsyncError(async (req, res, next) => {
+  const student = await Student.findById(req.user.id).select("-password");
+  const filteredcourses = student.resmue.courses.filter(
+    (i) => i.id !== req.params.courseid
+  );
+
+  student.resmue.courses = filteredcourses;
+  await student.save();
+
+  res.status(200).json(new ApiResponse(200, {}, " Courses Removed!"));
+});
+
+{
   /** ----------------------projects EndPoint--------------------- */
 }
 

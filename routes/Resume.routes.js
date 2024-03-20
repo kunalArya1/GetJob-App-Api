@@ -22,6 +22,9 @@ import {
   addaccomplishments,
   editaccomplishments,
   deleteaccomplishments,
+  addcourse,
+  editcourse,
+  deletecourse,
 } from "../controllers/Resume.controllers.js";
 import { isLoggoedIn } from "../middlewares/Auth.middleware.js";
 const router = express.Router();
@@ -87,6 +90,19 @@ router
   .post(isLoggoedIn, deleteresponsibilities);
 
 {
+  /** ---------------------- Courses Routes ----------------------- */
+}
+
+// POST /api/v1/resume/add-course
+router.route("/add-course").post(isLoggoedIn, addcourse);
+
+// POST  /api/v1/resume/edit-course/:courseid
+router.route("/edit-course/:courseid").post(isLoggoedIn, editcourse);
+
+// POST /api/v1/resmue/delete-course/:courseid
+router.route("/delete-course/:courseid").post(isLoggoedIn, deletecourse);
+
+{
   /** ---------------------- projects Routes ----------------------- */
 }
 
@@ -117,16 +133,16 @@ router.route("/delete-skill/:skilltid").post(isLoggoedIn, deleteskill);
 }
 
 // POST /api/v1/resume/add-accomplishment
-router.route("/add-accomplishment").post(isLoggoedIn, addaccomplishment);
+router.route("/add-accomplishment").post(isLoggoedIn, addaccomplishments);
 
 // POST  /api/v1/resume/edit-accomplishment/:acid
 router
   .route("/edit-accomplishment/:acid")
-  .post(isLoggoedIn, editaccomplishment);
+  .post(isLoggoedIn, editaccomplishments);
 
 // POST /api/v1/resmue/delete-accomplishment/:acid
 router
   .route("/delete-accomplishment/:acid")
-  .post(isLoggoedIn, deleteaccomplishment);
+  .post(isLoggoedIn, deleteaccomplishments);
 
 export default router;
