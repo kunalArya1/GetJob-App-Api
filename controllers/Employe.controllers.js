@@ -111,3 +111,10 @@ export const SignIn = catchAsyncError(async (req, res) => {
     .cookie("accessToken", accesstoken, options)
     .json(new ApiResponse(200, accesstoken, "Sign in SuccessFull"));
 });
+
+// Employe Sign Out
+export const signOut = catchAsyncError(async (req, res) => {
+  res.clearCookie("accessToken");
+  const user = req.user;
+  res.json(new ApiResponse(200, user, "SignOut Success"));
+});
