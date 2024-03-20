@@ -148,3 +148,33 @@ export const forgotPassword = catchAsyncError(async (req, res, next) => {
 
   res.status(200).json(new ApiResponse(200, url, "Email has been sent"));
 });
+
+// Employe Forgot Passsword Link
+export const forgotPasswordLink = catchAsyncError(async (req, res, next) => {
+  const id = req.params.id;
+//   console.log(id);
+
+  const employe = await Employe.findById(id);
+  // console.log(student);
+  if (!employe) {
+    throw new ApiError(401, "Invalid Link ! Try again with correct Link");
+  }
+//   console.log(req.body.password, employe.password);
+
+  if (employe.resetPawwordToken == "1") {
+    employe.resetPawwordToken = "0";
+    employe.password = req.body.password;
+    await employe.save();
+  } else {
+    return next(new ApiError(500, "Invalid Forgot Passsword Link"));
+  }
+
+//   console.log(employe.password);
+
+  res
+    .status(200)
+
+    .json(
+      new ApiResponse(200, {}, "Password Changed SuccessFully! Do Remember..")
+    );
+});
