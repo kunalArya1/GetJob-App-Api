@@ -152,14 +152,14 @@ export const forgotPassword = catchAsyncError(async (req, res, next) => {
 // Employe Forgot Passsword Link
 export const forgotPasswordLink = catchAsyncError(async (req, res, next) => {
   const id = req.params.id;
-//   console.log(id);
+  //   console.log(id);
 
   const employe = await Employe.findById(id);
   // console.log(student);
   if (!employe) {
     throw new ApiError(401, "Invalid Link ! Try again with correct Link");
   }
-//   console.log(req.body.password, employe.password);
+  //   console.log(req.body.password, employe.password);
 
   if (employe.resetPawwordToken == "1") {
     employe.resetPawwordToken = "0";
@@ -169,7 +169,7 @@ export const forgotPasswordLink = catchAsyncError(async (req, res, next) => {
     return next(new ApiError(500, "Invalid Forgot Passsword Link"));
   }
 
-//   console.log(employe.password);
+  //   console.log(employe.password);
 
   res
     .status(200)
@@ -177,4 +177,24 @@ export const forgotPasswordLink = catchAsyncError(async (req, res, next) => {
     .json(
       new ApiResponse(200, {}, "Password Changed SuccessFully! Do Remember..")
     );
+});
+
+// Employe Reset Password
+export const resetPassword = catchAsyncError(async (req, res) => {
+//   console.log(req.user);
+  const employe = await Employe.findById(req.user.id);
+
+  employe.password = req.body.password;
+  await employe.save();
+
+  const accessToken = await employe.generateAccessToken();
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .json(new ApiResponse(200, accessToken, "Password reset Successfully!"));
 });
