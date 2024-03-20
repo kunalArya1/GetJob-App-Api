@@ -9,6 +9,7 @@ export const Homepage = (req, res) => {
   res.send("Secure Homepage");
 };
 
+// Student Details
 export const StudentDetails = catchAsyncError(async (req, res) => {
   const student = await Student.findById(req.user.id).select("-password");
   res

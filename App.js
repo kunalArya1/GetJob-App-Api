@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import studentRoutes from "./routes/Student.routes.js";
 import resumeRoutes from "./routes/Resume.routes.js";
 import cookieParser from "cookie-parser";
+import employeRoutes from "./routes/Employe.routes.js";
 import { customError } from "./utils/CustomError.js";
 
 // Express App
@@ -23,6 +24,10 @@ app.use(cookieParser());
 
 // Student Routes
 app.use("/api/v1/student", studentRoutes);
+
+// Employe Routes
+app.use("/api/v1/employe", employeRoutes);
+
 // Resume Routes
 app.use("/api/v1/resume", resumeRoutes);
 
