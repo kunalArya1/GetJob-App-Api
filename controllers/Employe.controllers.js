@@ -74,4 +74,40 @@ export const SignUp = catchAsyncError(async (req, res) => {
     );
 });
 
+// Employe Sign In
+export const SignIn = catchAsyncError(async (req, res) => {
+  const { email, password } = req.body;
 
+  // console.log(req.body);
+
+  if (!email || !password) {
+    throw new ApiError(400, "Email and Password are required!");
+  }
+
+  const employe = await Employe.findOne({ email });
+
+  // console.log(student);
+  if (!employe) {
+    throw new ApiError(401, "Employe with this email is not registred");
+  }
+
+  const isPasswordMatching = await employe.isPassportCorrect(password);
+
+  // console.log(isPasswordMatching);
+
+  if (!isPasswordMatching) {
+    throw new ApiError(401, "Invalid Password! try again");
+  }
+
+  const accesstoken = await employe.generateAccessToken();
+
+  const options = {
+    secure: true,
+    httpOnly: true,
+  };
+
+  res
+    .status(200)
+    .cookie("accessToken", accesstoken, options)
+    .json(new ApiResponse(200, accesstoken, "Sign in SuccessFull"));
+});
