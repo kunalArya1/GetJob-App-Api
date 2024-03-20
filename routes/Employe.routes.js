@@ -51,10 +51,12 @@ router.route("/reset-password").post(isLoggoedIn, resetPassword);
 router.route("/add-internship").post(isLoggoedIn, addInternship);
 
 // POST /api/v1/employe/read-intership
-router.route("/read-internship").post(isLoggoedIn, readInternship);
+router.route("/read-internships").post(isLoggoedIn, readInternship);
 
 // POST /api/v1/employe/read-internship/:intershipid
-router.route("/read-internship/:id").post(isLoggoedIn, readsingleInternship);
+router
+  .route("/read-internship/:internshipid")
+  .post(isLoggoedIn, readsingleInternship);
 
 {
   /* <------------------job Routes----------------------> */
@@ -64,9 +66,9 @@ router.route("/read-internship/:id").post(isLoggoedIn, readsingleInternship);
 
   //GET /api/v1/employe/read-job
 
-  router.route("/read-job").get(isLoggoedIn, readJob);
+  router.route("/read-jobs").get(isLoggoedIn, readJob);
 
   //GET /api/v1/employe/read-job/:jobid
-  router.route("/read-job/:id").get(isLoggoedIn, readSingleJob);
+  router.route("/read-job/:jobid").get(isLoggoedIn, readSingleJob);
 }
 export default router;

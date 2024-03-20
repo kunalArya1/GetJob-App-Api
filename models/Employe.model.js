@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 
 const EmployeSchema = new mongoose.Schema(
   {
+    internships: [{ type: mongoose.Schema.Types.ObjectId, ref: "Internship" }],
+    jobs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Job" }],
     firstName: {
       type: String,
       required: [true, "First name is required"],
@@ -49,8 +51,6 @@ const EmployeSchema = new mongoose.Schema(
     },
     organizationname: {
       type: String,
-      required: [true, "Organization Name is required"],
-      minLength: [4, "Organization Name should be atleast 4 character long"],
     },
     organizationlogo: {
       type: String,
@@ -64,7 +64,7 @@ const EmployeSchema = new mongoose.Schema(
 EmployeSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
 
-  this.password = await bcrypt.hash(this.password, 10);
+  this.password = await bcrypt.hash(this.password, 12);
 });
 
 EmployeSchema.methods.isPassportCorrect = async function (password) {

@@ -207,7 +207,7 @@ export const resetPassword = catchAsyncError(async (req, res) => {
 
 // Employe Add Internship
 
-export const addInternShip = catchAsyncError(async (req, res) => {
+export const addInternship = catchAsyncError(async (req, res) => {
   const employe = await Employe.findById(req.user.id);
 
   const intership = await Internship.create(req.body);
@@ -223,7 +223,7 @@ export const addInternShip = catchAsyncError(async (req, res) => {
 });
 // Get All Employee's Internships
 
-export const getAllEmployeeInternships = catchAsyncError(async (req, res) => {
+export const readInternship = catchAsyncError(async (req, res) => {
   const { internships } = await Employe.findById(req.user.id).populate(
     "internships"
   );
@@ -239,8 +239,8 @@ export const getAllEmployeeInternships = catchAsyncError(async (req, res) => {
 });
 
 // Get Single Internship by ID from all employee's internships
-export const getSingleInternship = catchAsyncError(async (req, res) => {
-  const internship = await Internship.findById(req.params.intershipid);
+export const readsingleInternship = catchAsyncError(async (req, res) => {
+  const internship = await Internship.findById(req.params.internshipid);
 
   if (!internship) {
     throw new ApiError(404, "Internship Not Found with this id");
@@ -250,18 +250,18 @@ export const getSingleInternship = catchAsyncError(async (req, res) => {
 });
 
 {
-  /* <------------------Internship EndPoint----------------------> */
+  /* <------------------Job EndPoint----------------------> */
 }
 
 export const addJob = catchAsyncError(async (req, res) => {
   const employe = await Employe.findById(req.user.id);
 
-  const job = Job.create(req.body);
+  const job = await Job.create(req.body);
 
-  employe.jobs.push(await job._id);
+  employe.jobs.push(job._id);
   job.employe = employe._id;
-  await employe.save();
   await job.save();
+  await employe.save();
 
   res.status(201).json(new ApiResponse(201, job, "Job Added Successfully"));
 });
