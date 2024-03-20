@@ -37,4 +37,30 @@ router.route("/forgot-password-link/:id").get(forgotPasswordLink);
 // POST /api/v1/employe/reset-password ✅
 router.route("/reset-password").post(isLoggoedIn, resetPassword);
 
+{
+  /* <------------------Internship Routes----------------------> */
+}
+
+// POST /api/v1/employe/add-internship
+router.route("/add-internship").post(isLoggoedIn, addInternship);
+
+// POST /api/v1/employe/read-intership
+router.route("/read-internship").post(isLoggoedIn, readInternship);
+
+// POST /api/v1/employe/read-internship/:intershipid
+router.route("/read-internship/:id").post(isLoggoedIn, readsingleInternship);
+
+{
+  /* <------------------job Routes----------------------> */
+
+  // POST /api/v1/employe/add-job
+  router.route("/add-job").post(isLoggoedIn, addJob);
+
+  //GET /api/v1/employe/read-job
+
+  router.route("/read-job").get(isLoggoedIn, readJob);
+
+  //GET /api/v1/employe/read-job/:jobid
+  router.route("/read-job/:id").get(isLoggoedIn, readSingleJob);
+}
 export default router;

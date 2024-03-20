@@ -2,6 +2,7 @@ import catchAsyncError from "../utils/catchAsyncError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 import Employe from "../models/Employe.model.js";
+import Internship from "../models/Internship.models.js";
 import { uploadToCloudinary } from "../utils/Cloudinary.js";
 import { sendMail } from "../utils/Nodemailer.js";
 
@@ -181,7 +182,7 @@ export const forgotPasswordLink = catchAsyncError(async (req, res, next) => {
 
 // Employe Reset Password
 export const resetPassword = catchAsyncError(async (req, res) => {
-//   console.log(req.user);
+  //   console.log(req.user);
   const employe = await Employe.findById(req.user.id);
 
   employe.password = req.body.password;
@@ -197,4 +198,45 @@ export const resetPassword = catchAsyncError(async (req, res) => {
     .status(200)
     .cookie("accessToken", accessToken, options)
     .json(new ApiResponse(200, accessToken, "Password reset Successfully!"));
+});
+
+// Employe Add Internship
+
+export const addInternShip = catchAsyncError(async (req, res) => {
+  const employe = await Employe.findById(req.user.id);
+
+  const intership = await Internship.create(req.body);
+
+  employe.internships.push(intership._id);
+  intership.employe = employe._id;
+  await employe.save();
+  await intership.save();
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, intership, "Internship Added Successfully"));
+});
+// Get All Employee's Internships
+
+export const getAllEmployeeInternships = catchAsyncError(async (req, res) => {
+  const { internships } = await Employe.findById(req.user.id).populate(
+    "internships"
+  );
+
+  res
+    .status(200)
+    .json(
+      new ApiResponse(200, internships, "Internships Fetched Successfully")
+    );
+});
+
+// Get Single Internship by ID from all employee's internships
+export const getSingleInternship = catchAsyncError(async (req, res) => {
+  const internship = await Internship.findById(req.params.intershipid);
+
+  if(!internship){
+    throw new ApiError(404, "Internship Not Found");
+  }
+
+  res.status(200).json(new ApiResponse(200, internship, "Internship Fetched"));
 });
