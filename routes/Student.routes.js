@@ -8,6 +8,8 @@ import {
   resetPassword,
   StudentDetails,
   forgotPasswordLink,
+  readAllJobs,
+  readAllInternship,
 } from "../controllers/Student.controllers.js";
 import { upload } from "../middlewares/Multer.middleware.js";
 import { isLoggoedIn } from "../middlewares/Auth.middleware.js";
@@ -37,3 +39,13 @@ router.route("/forgot-password-link/:id").get(forgotPasswordLink);
 // POST /api/v1/student/reset-password ✅
 router.route("/reset-password").post(isLoggoedIn, resetPassword);
 export default router;
+
+{
+  /** Read All Internship  and Jobs */
+}
+
+// POST /api/v1/read-all-internships ✅
+router.route("/get-all-internships").post(isLoggoedIn, readAllInternship);
+
+// POST /api/v1/read-all-jobs ✅
+router.route("/get-all-jobs").post(isLoggoedIn, readAllJobs);

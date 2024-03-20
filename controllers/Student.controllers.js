@@ -4,6 +4,8 @@ import { ApiError } from "../utils/ApiError.js";
 import Student from "../models/Student.model.js";
 import { uploadToCloudinary } from "../utils/Cloudinary.js";
 import { sendMail } from "../utils/Nodemailer.js";
+import Internship from "../models/Internship.models.js";
+import Job from "../models/job.models.js";
 // Student Homepage
 export const Homepage = (req, res) => {
   res.send("Secure Homepage");
@@ -196,4 +198,26 @@ export const resetPassword = catchAsyncError(async (req, res) => {
     .status(200)
     .cookie("accessToken", accessToken, options)
     .json(new ApiResponse(200, accessToken, "Password reset Successfully!"));
+});
+
+// Read All Internship
+export const readAllInternship = catchAsyncError(async (req, res) => {
+  const allInterships = await Internship.find().exec();
+
+  if (!allInterships) {
+    throw new ApiError(404, "No Internship Found");
+  }
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, allInterships, "All Internships Fetched"));
+});
+
+// Read All Jobs
+export const readAllJobs = catchAsyncError(async (req, res) => {
+  const allJobs = await Job.find().exec();
+  if (!allJobs) {
+    throw new ApiError(404, "No Jobs Found");
+  }
+  res.status(200).json(new ApiResponse(200, allJobs, "All Jobs Fetched"));
 });
