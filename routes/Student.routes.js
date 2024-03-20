@@ -10,6 +10,8 @@ import {
   forgotPasswordLink,
   readAllJobs,
   readAllInternship,
+  applyInternship,
+  applyJob,
 } from "../controllers/Student.controllers.js";
 import { upload } from "../middlewares/Multer.middleware.js";
 import { isLoggoedIn } from "../middlewares/Auth.middleware.js";
@@ -49,3 +51,15 @@ router.route("/get-all-internships").post(isLoggoedIn, readAllInternship);
 
 // POST /api/v1/read-all-jobs ✅
 router.route("/get-all-jobs").post(isLoggoedIn, readAllJobs);
+
+{
+  /**     Apply for Jobs And Interships */
+}
+
+// POST /api/v1/apply/internship/:internshipid  ✅
+router
+  .route("/apply/internship/:internshipid")
+  .post(isLoggoedIn, applyInternship);
+
+// POST /api/v1/apply/job/:jobid  ✅
+router.route("/apply/job/:jobid").post(isLoggoedIn, applyJob);

@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 
 const studentSchema = new mongoose.Schema(
   {
+    jobs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Job" }],
+    internships: [{ type: mongoose.Schema.Types.ObjectId, ref: "Internship" }],
     firstName: {
       type: String,
       required: [true, "First name is required"],

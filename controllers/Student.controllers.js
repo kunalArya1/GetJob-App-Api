@@ -200,6 +200,10 @@ export const resetPassword = catchAsyncError(async (req, res) => {
     .json(new ApiResponse(200, accessToken, "Password reset Successfully!"));
 });
 
+{
+  /** --------------------- Get All Jobs And Internships-------------------------------- */
+}
+
 // Read All Internship
 export const readAllInternship = catchAsyncError(async (req, res) => {
   const allInterships = await Internship.find().exec();
@@ -220,4 +224,51 @@ export const readAllJobs = catchAsyncError(async (req, res) => {
     throw new ApiError(404, "No Jobs Found");
   }
   res.status(200).json(new ApiResponse(200, allJobs, "All Jobs Fetched"));
+});
+
+{
+  /* --------------------- Apply For Internship And Jobs-------------------------------- */
+}
+
+// Apply For Internship
+export const applyInternship = catchAsyncError(async (req, res) => {
+  const student = await Student.findById(req.user.id).exec();
+  const internship = await Internship.findById(req.params.internshipid).exec();
+
+  student.internships.push(internship._id);
+  internship.students.push(student._id);
+  await student.save();
+  await internship.save();
+
+  res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { student, internship },
+        "Applied For Internship Successfully"
+      )
+    );
+});
+
+// Apply For Job
+
+export const applyJob = catchAsyncError(async (req, res) => {
+  const student = await Student.findById(req.user.id).exec();
+  const job = await Job.findById(req.params.jobid).exec();
+
+  student.jobs.push(job._id);
+  job.students.push(student._id);
+  await student.save();
+  await job.save();
+
+  res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { student, job },
+        "Applied For Internship Successfully"
+      )
+    );
 });
