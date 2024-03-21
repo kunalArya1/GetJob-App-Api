@@ -204,7 +204,7 @@ export const resetPassword = catchAsyncError(async (req, res) => {
   /** --------------------- Get All Jobs And Internships-------------------------------- */
 }
 
-// Read All Internship
+// Read All Internships
 export const readAllInternship = catchAsyncError(async (req, res) => {
   const allInterships = await Internship.find().exec();
 
