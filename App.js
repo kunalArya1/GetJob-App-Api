@@ -11,6 +11,7 @@ import {
   readAllJobs,
 } from "./controllers/Student.controllers.js";
 import helmet from "helmet";
+import cors from "cors";
 
 // Express App
 const app = express();
@@ -32,6 +33,9 @@ app.use(express.static("./public"));
 
 // Helmet Added
 app.use(helmet());
+
+// Cors 
+app.use(cors());
 
 // Routes Setup
 
