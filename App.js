@@ -10,6 +10,7 @@ import {
   readAllInternship,
   readAllJobs,
 } from "./controllers/Student.controllers.js";
+import helmet from "helmet";
 
 // Express App
 const app = express();
@@ -28,6 +29,9 @@ app.use(cookieParser());
 // Static Folder
 
 app.use(express.static("./public"));
+
+// Helmet Added
+app.use(helmet());
 
 // Routes Setup
 
