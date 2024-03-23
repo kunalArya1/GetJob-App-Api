@@ -24,6 +24,11 @@ app.use(express.urlencoded({ extended: true }));
 
 // Cookie Parser
 app.use(cookieParser());
+
+// Static Folder
+
+app.use(express.static("./public"));
+
 // Routes Setup
 
 // Get all Job And Internships
