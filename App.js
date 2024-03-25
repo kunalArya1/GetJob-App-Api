@@ -6,6 +6,7 @@ import resumeRoutes from "./routes/Resume.routes.js";
 import cookieParser from "cookie-parser";
 import employeRoutes from "./routes/Employe.routes.js";
 import { customError } from "./utils/CustomError.js";
+import { readAllJobs } from "./controllers/Student.controllers.js";
 
 // Express App
 const app = express();
@@ -21,6 +22,10 @@ app.use(express.urlencoded({ extended: true }));
 // Cookie Parser
 app.use(cookieParser());
 // Routes Setup
+
+// Get all Job And Internships
+
+app.route("/api/v1/allJobs").get(readAllJobs);
 
 // Student Routes
 app.use("/api/v1/student", studentRoutes);
