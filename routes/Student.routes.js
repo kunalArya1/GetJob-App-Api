@@ -30,7 +30,7 @@ router.route("/sign-up").post(upload.single("avatar"), SignUp);
 router.route("/sign-in").post(SignIn);
 
 // POST /api/v1/student/sign-out ✅
-router.route("/sign-out").post(isLoggoedIn, signOut);
+router.route("/sign-out").get(isLoggoedIn, signOut);
 
 // POST /api/v1/student/forgot-password ✅
 router.route("/forgot-password").post(forgotPassword);
@@ -47,10 +47,10 @@ export default router;
 }
 
 // POST /api/v1/read-all-internships ✅
-router.route("/get-all-internships").post(isLoggoedIn, readAllInternship);
+router.route("/get-all-internships").get(isLoggoedIn, readAllInternship);
 
 // POST /api/v1/read-all-jobs ✅
-router.route("/get-all-jobs").post(isLoggoedIn, readAllJobs);
+router.route("/get-all-jobs").get(isLoggoedIn, readAllJobs);
 
 {
   /**     Apply for Jobs And Interships */

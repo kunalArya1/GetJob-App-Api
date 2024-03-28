@@ -15,6 +15,7 @@ export const homePage = catchAsyncError(async (req, res, next) => {
 export const addEducation = catchAsyncError(async (req, res, next) => {
   const student = await Student.findById(req.user.id).select("-password");
 
+  console.log(req.body);
   student.resmue.education.push({ ...req.body, id: uuidv4() });
   await student.save();
   res.status(200).json(new ApiResponse(200, req.body, "Education Added!"));

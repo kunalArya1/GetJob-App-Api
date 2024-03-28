@@ -42,7 +42,7 @@ router.route("/add-education").post(isLoggoedIn, addEducation);
 router.route("/edit-education/:eduid").post(isLoggoedIn, editEduaction);
 
 // POST /api/v1/resmue/delete-education/:eduid
-router.route("/delete-education/:eduid").post(isLoggoedIn, deleteEducation);
+router.route("/delete-education/:eduid").get(isLoggoedIn, deleteEducation);
 
 {
   /** ---------------------- Jobs Routes ----------------------- */
